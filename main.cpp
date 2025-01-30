@@ -27,22 +27,53 @@ struct Node {
     int g; // Cost
     int h; // Heuristic
     int f; // g + h
-}
+};
 
-Node Uniform_Search(problem, QUEUING_FUNCTION){
-    queue<Node> nodes;
-    bool temp = true;
+// Node Uniform_Search(problem, QUEUING_FUNCTION){
+//     queue<Node> nodes;
+//     bool temp = true;
 
-    while (temp){
-        if (nodes.empty()){
-            return 1; // Failure, no solution
-        }
-        node = nodes.pop();
-        
-        if problem.GoalTest(node){
-            return node;
-        }
-        nodes = QUEUING_FUNCTION(nodes, EXPAND(node,problem.OPERATORS))
-        return 0;
+//     while (temp){
+//         if (nodes.empty()){
+//             return 1; // Failure, no solution
+//         }
+//         node = nodes.pop();
+
+//         if problem.GoalTest(node){
+//             return node;
+//         }
+//         nodes = QUEUING_FUNCTION(nodes, EXPAND(node,problem.OPERATORS))
+//         return 0;
+//     }
+// }
+
+int MisplacedTileHeuristic(Node& node){
+    int count = 0;
+
+    if (node.pos.at(0) != 1){
+        count++;
     }
+    if (node.pos.at(1) != 2){
+        count++;
+    }
+    if (node.pos.at(2) != 3){
+        count++;
+    }
+    if (node.pos.at(3) != 4){
+        count++;
+    }
+    if (node.pos.at(4) != 5){
+        count++;
+    }
+    if (node.pos.at(5) != 6){
+        count++;
+    }
+    if (node.pos.at(6) != 7){
+        count++;
+    }
+    if (node.pos.at(7) != 8){
+        count++;
+    }
+
+    return count;
 }

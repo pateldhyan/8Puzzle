@@ -1,5 +1,7 @@
 #include <iostream>
 #include <queue>
+#include <vector>
+
 using namespace std;
 
 int main() {
@@ -9,9 +11,26 @@ int main() {
     return 0;
 }
 
-//Need to replace ints with structs or something to represent the puzzle space
-int Uniform_Search(problem, QUEUING_FUNCTION){
-    queue<int> nodes;
+struct Node {
+    // I will write a struct that represents the 8 puzzle for each node. 
+    // I will represent the position of each number with a1, a2, ..., c3
+    //
+    //    1  2  3
+    // a  #  #  #
+    // b  #  #  #
+    // c  #  #  #
+    //
+    // I will put these in a vector: positions = [a1, a2, ..., c3]
+
+    vector<int> pos = vector<int>(9);
+
+    int g; // Cost
+    int h; // Heuristic
+    int f; // g + h
+}
+
+Node Uniform_Search(problem, QUEUING_FUNCTION){
+    queue<Node> nodes;
     bool temp = true;
 
     while (temp){
@@ -19,6 +38,7 @@ int Uniform_Search(problem, QUEUING_FUNCTION){
             return 1; // Failure, no solution
         }
         node = nodes.pop();
+        
         if problem.GoalTest(node){
             return node;
         }

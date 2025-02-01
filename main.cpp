@@ -46,8 +46,7 @@ struct Node {
 // Next three function will be for the sorting algorithm
 // They are referenced from https://www.geeksforgeeks.org/sorting-queue-without-extra-space/
 // Tested with https://www.programiz.com/cpp-programming/online-compiler/
-int minIndex(queue<Node> &q, int sortedIndex) 
-{ 
+int minIndex(queue<Node> &q, int sortedIndex) { 
     int min_index = -1; 
     int min_val = INT_MAX; 
     int n = q.size(); 
@@ -63,8 +62,7 @@ int minIndex(queue<Node> &q, int sortedIndex)
     } 
     return min_index; 
 } 
-void insertMinToRear(queue<Node> &q, int min_index) 
-{ 
+void insertMinToRear(queue<Node> &q, int min_index){ 
     Node min_Node; 
     int n = q.size(); 
     for (int i = 0; i < n; i++) { 
@@ -84,6 +82,7 @@ void Queuing_Function(queue<Node> &q){
     } 
 }
 
+// Heuristic Functions
 int MisplacedTileHeuristic(Node& node){
     //SImply counting how many numbers are out of place
     int count = 0;
@@ -94,8 +93,8 @@ int MisplacedTileHeuristic(Node& node){
     }
     return count;
 }
-
 int ManhattanHeuristic(Node& node){
+    //Counting distance of each tile from goal state
     vector<int> goalState = {1, 2, 3, 4, 5, 6, 7, 8, 0};
     vector<int> currState = node.pos;
     int count = 0;

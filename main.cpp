@@ -2,15 +2,9 @@
 #include <queue>
 #include <vector>
 #include <cmath>
+#include <limits.h>
 
 using namespace std;
-
-int main() {
-
-    queue<int> myQueue;
-
-    return 0;
-}
 
 struct Node {
     // I will write a struct that represents the 8 puzzle for each node. 
@@ -49,8 +43,9 @@ struct Node {
 //     }
 // }
 
-//Next three function will be for the sorting algorithm
-//They are referenced from https://www.geeksforgeeks.org/sorting-queue-without-extra-space/
+// Next three function will be for the sorting algorithm
+// They are referenced from https://www.geeksforgeeks.org/sorting-queue-without-extra-space/
+// Tested with https://www.programiz.com/cpp-programming/online-compiler/
 int minIndex(queue<Node> &q, int sortedIndex) 
 { 
     int min_index = -1; 
@@ -82,7 +77,7 @@ void insertMinToRear(queue<Node> &q, int min_index)
     } 
     q.push(min_Node); 
 } 
-queue<Node> Queuing_Function(queue<Node> &q){
+void Queuing_Function(queue<Node> &q){
     for (int i = 1; i <= q.size(); i++) { 
         int min_index = minIndex(q, q.size() - i); 
         insertMinToRear(q, min_index); 
@@ -122,15 +117,34 @@ int MisplacedTileHeuristic(Node& node){
     return count;
 }
 
-
 int ManhattanHeuristic(Node& node){
-    
+    vector<int> goalState = {1, 2, 3, 4, 5, 6, 7, 8, 0};
+    vector<int> currState = node.pos;
+    int count = 0;
+    int currX, currY, goalX, goalY = -99;
+
     //Need to calculate the total distance (up and sideways) each tile has to move
-    for(int i = 0; i < 9; i++){
+    for(int i = 0; i <= 8; i++){
         //Iterate through each tile and determine where it should be
-        int currNum = node.pos.at(i);
-        if(currNum != 0){       //Skip 0 (empty) tile
-            
+        if(currState.at(i) != 0){       //Skip 0 (empty) tile
+            if (currState.at(i) != goalState.at(i)){    //Only need to add if number not at goal state
+                //Calculating "coordinates" of current and goal state to find the difference
+                currX = currState.at(i) % 3;
+                currY = currState.at(i) / 3;
+                goalX = (goalState.at(i) - 1) % 3;
+                goalY = (goalState.at(i) - 1) / 3;
+                
+                count += abs(currX - goalX) + abs(currY - goalY);
+            }
         }
     }
+
+    return count;
+}
+
+int main() {
+
+    queue<int> myQueue;
+
+    return 0;
 }

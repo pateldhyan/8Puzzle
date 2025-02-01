@@ -85,35 +85,13 @@ void Queuing_Function(queue<Node> &q){
 }
 
 int MisplacedTileHeuristic(Node& node){
-    
     //SImply counting how many numbers are out of place
     int count = 0;
-
-    if(node.pos.at(0) != 1){
-        count++;
+    for(int i = 0; i <= 7; i++){
+        if (node.pos.at(0) != i + 1){
+            count++;
+        }
     }
-    if (node.pos.at(1) != 2){
-        count++;
-    }
-    if (node.pos.at(2) != 3){
-        count++;
-    }
-    if (node.pos.at(3) != 4){
-        count++;
-    }
-    if (node.pos.at(4) != 5){
-        count++;
-    }
-    if (node.pos.at(5) != 6){
-        count++;
-    }
-    if (node.pos.at(6) != 7){
-        count++;
-    }
-    if (node.pos.at(7) != 8){
-        count++;
-    }
-
     return count;
 }
 

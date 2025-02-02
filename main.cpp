@@ -25,23 +25,75 @@ struct Node {
     int f; // g + h
 };
 
-// Node Uniform_Search(problem, QUEUING_FUNCTION){
-//     queue<Node> nodes;
-//     bool temp = true;
+// Function to easily output the board
+void Puzzle_Output(vector<int> nums){
+    cout << " ___________" << endl;
+    cout << "|_" << nums.at(0) << "_|_" << nums.at(1) << "_|_" << nums.at(2) << "_|" << endl;
+    cout << "|_" << nums.at(3) << "_|_" << nums.at(4) << "_|_" << nums.at(5) << "_|" << endl;
+    cout << "|_" << nums.at(6) << "_|_" << nums.at(7) << "_|_" << nums.at(8) << "_|" << endl;
+    cout << endl;
+}
 
-//     while (temp){
-//         if (nodes.empty()){
-//             return 1; // Failure, no solution
-//         }
-//         node = nodes.pop();
+Node SelectPuzzle(){
+    int userInput;
+    Node initialState;
+    vector<int> easyPuzzle = {1, 2, 3, 4, 0, 6, 7, 5, 8};
+    vector<int> mediumPuzzle = {0, 2, 5, 1, 4, 8, 6, 7, 3};
+    vector<int> hardPuzzle = {1, 6, 7, 5, 0, 3, 4, 8, 2};
 
-//         if problem.GoalTest(node){
-//             return node;
-//         }
-//         nodes = QUEUING_FUNCTION(nodes, EXPAND(node,problem.OPERATORS))
-//         return 0;
-//     }
-// }
+    cout << "Would you like to use an example you input your own puzzle?" << endl;
+    cout << "1: Use an example: " << endl;
+    cout << "2: Input a new puzzle: " <<  endl;
+
+    bool temp = true;
+    while (temp){
+        cin >> userInput;
+        if(userInput != 1 && userInput != 2){
+            cout << endl << "Please enter either 1 or 2" << endl;
+        }
+        else{
+            temp = false;
+        } 
+    }
+
+    //Premade puzzles
+    if (userInput == 1){
+        cout << "1. Easy: " << endl;
+        Puzzle_Output(easyPuzzle);
+        cout << endl;
+        cout << "2. Meduium: " << endl;
+        Puzzle_Output(mediumPuzzle);
+        cout << endl;
+        cout << "3 Hard: " << endl;
+        Puzzle_Output(hardPuzzle);
+        cout << endl;
+
+        cout << "Which number would you like to solve: " << endl;
+        temp = true;
+        while (temp){
+            cin >> userInput;
+            if(userInput != 1 && userInput != 2 && userInput != 3 ){
+                cout << endl << "Please enter either 1, 2, or 3" << endl;
+            }
+            else{
+                temp = false;
+            } 
+        }
+        if (userInput == 1){
+            initialState.pos = easyPuzzle;
+        }
+        else if(userInput == 2){
+            initialState.pos = mediumPuzzle;
+        }
+        else if(userInput == 3){
+            initialState.pos = hardPuzzle;
+        }
+    }
+    
+    //Custom puzzles
+
+    return initialState;
+}
 
 // Next three function will be for the sorting algorithm
 // They are referenced from https://www.geeksforgeeks.org/sorting-queue-without-extra-space/
@@ -122,7 +174,26 @@ int ManhattanHeuristic(Node& node){
 
 int main() {
 
-    queue<int> myQueue;
+    // queue<Node> nodes;
+    // bool temp = true;
+
+    // while (temp){
+    //     if (nodes.empty()){
+    //         cout << "Failure. No solution" << endl;
+    //         return 0; // Failure, no solution
+    //     }
+    //     Node node = nodes.pop();
+
+    //     if (problem.GoalTest(node)){
+    //         return node;
+    //     }
+
+    //     nodes = QUEUING_FUNCTION(nodes, EXPAND(node,problem.OPERATORS))
+    //     return 0;
+    // }
+    Node puzzle = SelectPuzzle();
+    for (auto i : puzzle.pos)
+        cout << i << " ";
 
     return 0;
 }

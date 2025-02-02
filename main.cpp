@@ -89,9 +89,17 @@ Node SelectPuzzle(){
             initialState.pos = hardPuzzle;
         }
     }
-    
-    //Custom puzzles
 
+    //Custom puzzles
+    else{
+        vector<int> customPuzzle(9);
+        cout << "Please enter your custom puzzle 3 numbers at a time with a space between each number. Enter 0 for the empty space. " << endl;
+        cout << "First line:  "; cin >> customPuzzle.at(0) >> customPuzzle.at(1) >> customPuzzle.at(2); cout;
+        cout << "Second line: "; cin >> customPuzzle.at(3) >> customPuzzle.at(4) >> customPuzzle.at(5); cout;
+        cout << "Third line:  "; cin >> customPuzzle.at(6) >> customPuzzle.at(7) >> customPuzzle.at(8); cout;
+        
+        initialState.pos = customPuzzle;
+    }
     return initialState;
 }
 

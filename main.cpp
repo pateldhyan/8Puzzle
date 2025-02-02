@@ -105,12 +105,13 @@ int ManhattanHeuristic(Node& node){
         //Iterate through each tile and determine where it should be
         if(currState.at(i) != 0){       //Skip 0 (empty) tile
             if (currState.at(i) != goalState.at(i)){    //Only need to add if number not at goal state
-                //Calculating "coordinates" of current and goal state to find the difference
-                currX = currState.at(i) % 3;
-                currY = currState.at(i) / 3;
-                goalX = (goalState.at(i) - 1) % 3;
-                goalY = (goalState.at(i) - 1) / 3;
-                
+                //Current position of i (0,0 is top left corner)
+                currX = i % 3;
+                currY = i / 3;
+                //Where the number should be
+                goalX = (currState.at(i) - 1) % 3;
+                goalY = (currState.at(i) - 1) / 3;
+                //Adding difference to heuristic
                 count += abs(currX - goalX) + abs(currY - goalY);
             }
         }

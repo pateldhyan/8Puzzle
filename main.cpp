@@ -46,7 +46,7 @@ Node SelectPuzzle(){
 
     Node initialState(initialVec, 0, 0);
     vector<int> easyPuzzle = {1, 2, 3, 4, 0, 6, 7, 5, 8};
-    vector<int> mediumPuzzle = {0, 2, 5, 1, 4, 8, 6, 7, 3};
+    vector<int> mediumPuzzle = {2, 4, 3, 7, 1, 6, 0, 5, 8};
     vector<int> hardPuzzle = {1, 6, 7, 5, 0, 3, 4, 8, 2};
 
     cout << "Would you like to use an example you input your own puzzle?" << endl;
@@ -287,24 +287,34 @@ void Expand(queue<Node>& nodes, Node& node, int searchType){
 Node SearchAlgorithm(Node& initialState, int searchType){
     // 1: Uniform Cost, 2: Misplaced Tile, 3: Manhattan
     
+    // Start queue and insert initial state of puzzle
     queue<Node> nodes;
     nodes.push(initialState);
 
     bool timeOut = false;
     int count = 0;
+    Node node;
     while(!timeOut){
+        // No solution if the queue is empty
         if(nodes.empty()){
             cout << "No solution found. " << endl;
         }
-        Node node = nodes.front();
+        node = nodes.front();
         nodes.pop();
+
         if(GoalTest(node)){
+            cout << "Goal State!" << endl;
+            cout <<"Nodes Expanded: "<< count << endl;
             return node;
         }
-        //nodes = QUEUEING-FUNCTION(nodes, EXPAND(node, problem.OPERATORS))
+
         Expand(nodes, node, searchType);
         Queuing_Function(nodes);
         
+        cout << "The move with the smallest f(n) is: " << endl;
+        Puzzle_Output(nodes.front().pos);
+        cout << "It has g(n) = " << nodes.front().g << " and h(n) = " << nodes.front().h << endl << endl;
+
         count++;
         if(count > 999)
             timeOut = true;
@@ -322,10 +332,10 @@ int main() {
     cout << "3. A* search with Manhattan Heuristic" << endl;
     int searchType;
     cin >> searchType;
+    cout << endl << endl;
 
     Node finalNode = SearchAlgorithm(initialState, searchType);
-    Puzzle_Output(finalNode.pos);
-    cout << "g: " << finalNode.g << endl;
+    cout << "Depth: " << finalNode.g << endl;
     cout << "h: " << finalNode.h << endl;
     cout << "f: " << finalNode.f << endl;
     return 0;

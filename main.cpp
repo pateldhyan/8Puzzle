@@ -24,6 +24,10 @@ struct Node {
     int g; // Cost
     int h; // Heuristic
     int f; // g + h
+
+    //Constructor
+    Node() {}
+    Node(vector<int> posVec, int gVal, int hVal) : pos(posVec), g(gVal), h(hVal), f(gVal+hVal) {}
 };
 
 // Function to easily output the board
@@ -191,6 +195,92 @@ bool GoalTest(Node& node){
         return false;
 }
 
+// Adds all possible moves to queue
+void Expand(queue<Node>& nodes, Node& node, int searchType){
+
+    //Find index of 0 (empty space)
+    int index = -1;
+    for(int i = 0; i < node.pos.size(); i++){
+        if (node.pos.at(i) == 0){
+            index = i;
+        }
+    }
+
+    // Adding all possible moves to queue of nodes
+    // Including heuristic calculations here while creating new nodes
+    // Up operator
+    if(index/3 != 0){
+        vector<int> gameState = node.pos;
+        int temp = gameState.at(index-3);
+        gameState.at(index-3) = gameState.at(index);
+        gameState.at(index) = temp;
+        //Creating new node based on type of heuristic
+        int h;
+        if (searchType == 1)
+            h = 0;
+        else if (searchType == 2)
+            h = MisplacedTileHeuristic(node);
+        else if (searchType == 3)
+            h = ManhattanHeuristic(node);
+
+        Node newNode(gameState, node.g + 1 , h);
+        nodes.push(newNode);
+    }
+    //Down operator
+    if(index/3 != 2){
+        vector<int> gameState = node.pos;
+        int temp = gameState.at(index+3);
+        gameState.at(index+3) = gameState.at(index);
+        gameState.at(index) = temp;
+        //Creating new node based on type of heuristic
+        int h;
+        if (searchType == 1)
+            h = 0;
+        else if (searchType == 2)
+            h = MisplacedTileHeuristic(node);
+        else if (searchType == 3)
+            h = ManhattanHeuristic(node);
+
+        Node newNode(gameState, node.g + 1 , h);
+        nodes.push(newNode);
+    }
+    //Left operator
+    if(index%3 != 0){
+        vector<int> gameState = node.pos;
+        int temp = gameState.at(index-1);
+        gameState.at(index-1) = gameState.at(index);
+        gameState.at(index) = temp;
+        //Creating new node based on type of heuristic
+        int h;
+        if (searchType == 1)
+            h = 0;
+        else if (searchType == 2)
+            h = MisplacedTileHeuristic(node);
+        else if (searchType == 3)
+            h = ManhattanHeuristic(node);
+
+        Node newNode(gameState, node.g + 1 , h);
+        nodes.push(newNode);
+    }
+    //Right operator
+    if(index%3 != 2){
+        vector<int> gameState = node.pos;
+        int temp = gameState.at(index+1);
+        gameState.at(index+1) = gameState.at(index);
+        gameState.at(index) = temp;
+        //Creating new node based on type of heuristic
+        int h;
+        if (searchType == 1)
+            h = 0;
+        else if (searchType == 2)
+            h = MisplacedTileHeuristic(node);
+        else if (searchType == 3)
+            h = ManhattanHeuristic(node);
+
+        Node newNode(gameState, node.g + 1 , h);
+        nodes.push(newNode);
+    }
+}
 // Driver function for search
 Node SearchAlgorithm(Node& initialState, int searchType){
     // 1: Uniform Cost, 2: Misplaced Tile, 3: Manhattan
@@ -208,28 +298,13 @@ Node SearchAlgorithm(Node& initialState, int searchType){
         if(GoalTest(node)){
             return node;
         }
+        //nodes = QUEUEING-FUNCTION(nodes, EXPAND(node, problem.OPERATORS))
+        Expand(nodes, node, searchType);
+        Queuing_Function(nodes);
     }
 }
 
 int main() {
-
-    // queue<Node> nodes;
-    // bool temp = true;
-
-    // while (temp){
-    //     if (nodes.empty()){
-    //         cout << "Failure. No solution" << endl;
-    //         return 0; // Failure, no solution
-    //     }
-    //     Node node = nodes.pop();
-
-    //     if (problem.GoalTest(node)){
-    //         return node;
-    //     }
-
-    //     nodes = QUEUING_FUNCTION(nodes, EXPAND(node,problem.OPERATORS))
-    //     return 0;
-    // }
     Node puzzle = SelectPuzzle();
     for (auto i : puzzle.pos)
         cout << i << " ";

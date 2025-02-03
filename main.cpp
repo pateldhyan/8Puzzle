@@ -6,6 +6,7 @@
 
 using namespace std;
 
+// Struct to represent each node
 struct Node {
     // I will write a struct that represents the 8 puzzle for each node. 
     // I will represent the position of each number with a1, a2, ..., c3
@@ -16,7 +17,7 @@ struct Node {
     // b |_b1_|_b2_|_b3_| 
     // c |_c1_|_c2_|_c3_|
     //
-    // I will put these in a vector: pos = [a1, a2, ..., c3]
+    // I will put these in a vector: pos = [a1, a2, ..., c2, c3]
 
     vector<int> pos = vector<int>(9);
 
@@ -34,6 +35,7 @@ void Puzzle_Output(vector<int> nums){
     cout << endl;
 }
 
+// Interface function to select or input a puzzle
 Node SelectPuzzle(){
     int userInput;
     Node initialState;
@@ -178,6 +180,35 @@ int ManhattanHeuristic(Node& node){
     }
 
     return count;
+}
+
+//Test to check if puzzle is solved
+bool GoalTest(Node& node){
+    vector<int> goalState = {1,2,3,4,5,6,7,8,0};
+    if(node.pos == goalState)
+        return true;
+    else
+        return false;
+}
+
+// Driver function for search
+Node SearchAlgorithm(Node& initialState, int searchType){
+    // 1: Uniform Cost, 2: Misplaced Tile, 3: Manhattan
+    
+    queue<Node> nodes;
+    nodes.push(initialState);
+
+    bool solutionFound = false;
+    while(!solutionFound){
+        if(nodes.empty()){
+            cout << "No solution found. " << endl;
+        }
+        Node node = nodes.front();
+        nodes.pop();
+        if(GoalTest(node)){
+            return node;
+        }
+    }
 }
 
 int main() {

@@ -290,6 +290,9 @@ Node SearchAlgorithm(Node& initialState, int searchType){
     // Start queue and insert initial state of puzzle
     queue<Node> nodes;
     nodes.push(initialState);
+    cout << "Starting position: " << endl;
+    Puzzle_Output(initialState.pos);
+    cout << endl;
 
     bool timeOut = false;
     int count = 0;
@@ -336,7 +339,5 @@ int main() {
 
     Node finalNode = SearchAlgorithm(initialState, searchType);
     cout << "Depth: " << finalNode.g << endl;
-    cout << "h: " << finalNode.h << endl;
-    cout << "f: " << finalNode.f << endl;
     return 0;
 }

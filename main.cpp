@@ -42,7 +42,9 @@ void Puzzle_Output(vector<int> nums){
 // Interface function to select or input a puzzle
 Node SelectPuzzle(){
     int userInput;
-    Node initialState;
+    vector<int> initialVec = {-1,-1,-1,-1,-1,-1,-1,-1,-1};
+
+    Node initialState(initialVec, 0, 0);
     vector<int> easyPuzzle = {1, 2, 3, 4, 0, 6, 7, 5, 8};
     vector<int> mediumPuzzle = {0, 2, 5, 1, 4, 8, 6, 7, 3};
     vector<int> hardPuzzle = {1, 6, 7, 5, 0, 3, 4, 8, 2};
@@ -149,20 +151,19 @@ void Queuing_Function(queue<Node> &q){
 }
 
 // Heuristic Functions
-int MisplacedTileHeuristic(Node& node){
+int MisplacedTileHeuristic(vector<int> currState){
     //SImply counting how many numbers are out of place
     int count = 0;
     for(int i = 0; i <= 7; i++){
-        if (node.pos.at(0) != i + 1){
+        if (currState.at(i) != i + 1){
             count++;
         }
     }
     return count;
 }
-int ManhattanHeuristic(Node& node){
+int ManhattanHeuristic(vector<int> currState){
     //Counting distance of each tile from goal state
     vector<int> goalState = {1, 2, 3, 4, 5, 6, 7, 8, 0};
-    vector<int> currState = node.pos;
     int count = 0;
     int currX, currY, goalX, goalY = -99;
 
@@ -219,9 +220,9 @@ void Expand(queue<Node>& nodes, Node& node, int searchType){
         if (searchType == 1)
             h = 0;
         else if (searchType == 2)
-            h = MisplacedTileHeuristic(node);
+            h = MisplacedTileHeuristic(gameState);
         else if (searchType == 3)
-            h = ManhattanHeuristic(node);
+            h = ManhattanHeuristic(gameState);
 
         Node newNode(gameState, node.g + 1 , h);
         nodes.push(newNode);
@@ -237,9 +238,9 @@ void Expand(queue<Node>& nodes, Node& node, int searchType){
         if (searchType == 1)
             h = 0;
         else if (searchType == 2)
-            h = MisplacedTileHeuristic(node);
+            h = MisplacedTileHeuristic(gameState);
         else if (searchType == 3)
-            h = ManhattanHeuristic(node);
+            h = ManhattanHeuristic(gameState);
 
         Node newNode(gameState, node.g + 1 , h);
         nodes.push(newNode);
@@ -255,9 +256,9 @@ void Expand(queue<Node>& nodes, Node& node, int searchType){
         if (searchType == 1)
             h = 0;
         else if (searchType == 2)
-            h = MisplacedTileHeuristic(node);
+            h = MisplacedTileHeuristic(gameState);
         else if (searchType == 3)
-            h = ManhattanHeuristic(node);
+            h = ManhattanHeuristic(gameState);
 
         Node newNode(gameState, node.g + 1 , h);
         nodes.push(newNode);
@@ -273,41 +274,53 @@ void Expand(queue<Node>& nodes, Node& node, int searchType){
         if (searchType == 1)
             h = 0;
         else if (searchType == 2)
-            h = MisplacedTileHeuristic(node);
+            h = MisplacedTileHeuristic(gameState);
         else if (searchType == 3)
-            h = ManhattanHeuristic(node);
+            h = ManhattanHeuristic(gameState);
 
         Node newNode(gameState, node.g + 1 , h);
         nodes.push(newNode);
     }
 }
 // Driver function for search
-Node SearchAlgorithm(Node& initialState, int searchType){
-    // 1: Uniform Cost, 2: Misplaced Tile, 3: Manhattan
+// Node SearchAlgorithm(Node& initialState, int searchType){
+//     // 1: Uniform Cost, 2: Misplaced Tile, 3: Manhattan
     
-    queue<Node> nodes;
-    nodes.push(initialState);
+//     queue<Node> nodes;
+//     nodes.push(initialState);
 
-    bool solutionFound = false;
-    while(!solutionFound){
-        if(nodes.empty()){
-            cout << "No solution found. " << endl;
-        }
-        Node node = nodes.front();
-        nodes.pop();
-        if(GoalTest(node)){
-            return node;
-        }
-        //nodes = QUEUEING-FUNCTION(nodes, EXPAND(node, problem.OPERATORS))
-        Expand(nodes, node, searchType);
-        Queuing_Function(nodes);
-    }
-}
+//     bool solutionFound = false;
+//     while(!solutionFound){
+//         if(nodes.empty()){
+//             cout << "No solution found. " << endl;
+//         }
+//         Node node = nodes.front();
+//         nodes.pop();
+//         if(GoalTest(node)){
+//             return node;
+//         }
+//         //nodes = QUEUEING-FUNCTION(nodes, EXPAND(node, problem.OPERATORS))
+//         Expand(nodes, node, searchType);
+//         Queuing_Function(nodes);
+//     }
+// }
 
 int main() {
-    Node puzzle = SelectPuzzle();
-    for (auto i : puzzle.pos)
-        cout << i << " ";
+    queue<Node> nodes;
+    Node node = SelectPuzzle();
+    nodes.push(node);
 
+    Node temp = nodes.front();
+    nodes.pop();
+    Expand(nodes, temp, 2);
+    while(!nodes.empty()){
+        Puzzle_Output(nodes.front().pos);
+        cout << "g: " << nodes.front().g << endl;
+        cout << "h: " << nodes.front().h << endl;
+        cout << "f: " << nodes.front().f << endl;
+        nodes.pop();
+        
+    } 
+    
     return 0;
 }

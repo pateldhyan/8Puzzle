@@ -282,45 +282,51 @@ void Expand(queue<Node>& nodes, Node& node, int searchType){
         nodes.push(newNode);
     }
 }
-// Driver function for search
-// Node SearchAlgorithm(Node& initialState, int searchType){
-//     // 1: Uniform Cost, 2: Misplaced Tile, 3: Manhattan
-    
-//     queue<Node> nodes;
-//     nodes.push(initialState);
 
-//     bool solutionFound = false;
-//     while(!solutionFound){
-//         if(nodes.empty()){
-//             cout << "No solution found. " << endl;
-//         }
-//         Node node = nodes.front();
-//         nodes.pop();
-//         if(GoalTest(node)){
-//             return node;
-//         }
-//         //nodes = QUEUEING-FUNCTION(nodes, EXPAND(node, problem.OPERATORS))
-//         Expand(nodes, node, searchType);
-//         Queuing_Function(nodes);
-//     }
-// }
+//Driver function for search
+Node SearchAlgorithm(Node& initialState, int searchType){
+    // 1: Uniform Cost, 2: Misplaced Tile, 3: Manhattan
+    
+    queue<Node> nodes;
+    nodes.push(initialState);
+
+    bool timeOut = false;
+    int count = 0;
+    while(!timeOut){
+        if(nodes.empty()){
+            cout << "No solution found. " << endl;
+        }
+        Node node = nodes.front();
+        nodes.pop();
+        if(GoalTest(node)){
+            return node;
+        }
+        //nodes = QUEUEING-FUNCTION(nodes, EXPAND(node, problem.OPERATORS))
+        Expand(nodes, node, searchType);
+        Queuing_Function(nodes);
+        
+        count++;
+        if(count > 999)
+            timeOut = true;
+    }
+    return nodes.front();
+}
 
 int main() {
-    queue<Node> nodes;
-    Node node = SelectPuzzle();
-    nodes.push(node);
 
-    Node temp = nodes.front();
-    nodes.pop();
-    Expand(nodes, temp, 2);
-    while(!nodes.empty()){
-        Puzzle_Output(nodes.front().pos);
-        cout << "g: " << nodes.front().g << endl;
-        cout << "h: " << nodes.front().h << endl;
-        cout << "f: " << nodes.front().f << endl;
-        nodes.pop();
-        
-    } 
-    
+    Node initialState = SelectPuzzle();
+
+    cout << "Would you like to use: " << endl;
+    cout << "1. Uniform Cost search" << endl;
+    cout << "2. A* search with Misplaced Tile Heuristic" << endl;
+    cout << "3. A* search with Manhattan Heuristic" << endl;
+    int searchType;
+    cin >> searchType;
+
+    Node finalNode = SearchAlgorithm(initialState, searchType);
+    Puzzle_Output(finalNode.pos);
+    cout << "g: " << finalNode.g << endl;
+    cout << "h: " << finalNode.h << endl;
+    cout << "f: " << finalNode.f << endl;
     return 0;
 }

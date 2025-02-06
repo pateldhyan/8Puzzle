@@ -4,7 +4,6 @@
 #include <cmath>
 #include <limits.h>
 #include <chrono>
-
 using namespace std;
 
 // Struct to represent each node
@@ -112,46 +111,6 @@ Node SelectPuzzle(){
     return initialState;
 }
 
-// Next three function will be for the sorting algorithm
-// They are referenced from https://www.geeksforgeeks.org/sorting-queue-without-extra-space/
-// Tested with https://www.programiz.com/cpp-programming/online-compiler/
-int minIndex(queue<Node> &q, int sortedIndex) { 
-    int min_index = -1; 
-    int min_val = INT_MAX; 
-    int n = q.size(); 
-    for (int i=0; i<n; i++) { 
-        Node curr = q.front(); 
-        q.pop();  
-        if (curr.f <= min_val && i <= sortedIndex) 
-        { 
-            min_index = i; 
-            min_val = curr.f; 
-        } 
-        q.push(curr);
-    } 
-    return min_index; 
-} 
-void insertMinToRear(queue<Node> &q, int min_index){ 
-    Node min_Node; 
-    int n = q.size(); 
-    for (int i = 0; i < n; i++) { 
-        Node curr = q.front(); 
-        q.pop(); 
-        if (i != min_index) 
-            q.push(curr); 
-        else
-            min_Node = curr; 
-    } 
-    q.push(min_Node); 
-} 
-void Queuing_Function(queue<Node> &q){
-    for (int i = 1; i <= q.size(); i++) { 
-        int min_index = minIndex(q, q.size() - i); 
-        insertMinToRear(q, min_index); 
-    } 
-}
-
-
 // Heuristic Functions
 int MisplacedTileHeuristic(const vector<int>& currState){
     //SImply counting how many numbers are out of place
@@ -198,8 +157,15 @@ bool GoalTest(Node& node){
         return false;
 }
 
+
+struct CompareNodes{
+    bool operator()(const Node &a, const Node &b){
+        return a.f > b.f;
+    }
+};
+
 // Adds all possible moves to queue
-void Expand(queue<Node>& nodes, Node& node, int searchType){
+void Expand(priority_queue<Node, vector<Node>, CompareNodes>& nodes, Node& node, int searchType){
 
     //Find index of 0 (empty space)
     int index = -1;
@@ -290,7 +256,7 @@ Node SearchAlgorithm(Node& initialState, int searchType){
     // 1: Uniform Cost, 2: Misplaced Tile, 3: Manhattan
     
     // Start queue and insert initial state of puzzle
-    queue<Node> nodes;
+    priority_queue<Node, vector<Node>, CompareNodes> nodes;
     nodes.push(initialState);
     cout << "Starting position: " << endl;
     Puzzle_Output(initialState.pos);
@@ -308,7 +274,7 @@ Node SearchAlgorithm(Node& initialState, int searchType){
         }
 
         maxQueueSize = max(maxQueueSize, (int)nodes.size());
-        node = nodes.front();
+        node = nodes.top();
         nodes.pop();
 
         if(GoalTest(node)){
@@ -321,17 +287,17 @@ Node SearchAlgorithm(Node& initialState, int searchType){
         }
 
         Expand(nodes, node, searchType);
-        Queuing_Function(nodes);
+        //Queuing_Function(nodes);
         
         cout << "The move with the smallest f(n) is: " << endl;
-        Puzzle_Output(nodes.front().pos);
-        cout << "It has g(n) = " << nodes.front().g << " and h(n) = " << nodes.front().h << endl << endl;
+        Puzzle_Output(nodes.top().pos);
+        cout << "It has g(n) = " << nodes.top().g << " and h(n) = " << nodes.top().h << endl << endl;
 
-        count++;
-        if(count > 9999)
-            timeOut = true;
+        // count++;
+        // if(count > 9999)
+        //     timeOut = true;
     }
-    return nodes.front();
+    return nodes.top();
 }
 
 int main() {

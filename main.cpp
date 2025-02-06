@@ -287,15 +287,22 @@ Node SearchAlgorithm(Node& initialState, int searchType){
         }
 
         Expand(nodes, node, searchType);
+        count++;
+        cout << "Nodes Expanded: " << count << endl;
         //Queuing_Function(nodes);
         
         cout << "The move with the smallest f(n) is: " << endl;
-        Puzzle_Output(nodes.top().pos);
-        cout << "It has g(n) = " << nodes.top().g << " and h(n) = " << nodes.top().h << endl << endl;
+        //Puzzle_Output(nodes.top().pos);
+        //cout << "It has g(n) = " << nodes.top().g << " and h(n) = " << nodes.top().h << endl << endl;
+        
 
-        // count++;
-        // if(count > 9999)
-        //     timeOut = true;
+        
+        if(count > 10000){
+            timeOut = true;
+            cout << "Timed out . . ." << endl;            
+            cout <<"Nodes Expanded: "<< count << endl;
+            cout << "Maximum Queue Size: " << maxQueueSize << endl;
+        }
     }
     return nodes.top();
 }

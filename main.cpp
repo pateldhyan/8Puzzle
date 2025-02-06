@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include <limits.h>
+#include <chrono>
 
 using namespace std;
 
@@ -150,8 +151,9 @@ void Queuing_Function(queue<Node> &q){
     } 
 }
 
+
 // Heuristic Functions
-int MisplacedTileHeuristic(vector<int> currState){
+int MisplacedTileHeuristic(const vector<int>& currState){
     //SImply counting how many numbers are out of place
     int count = 0;
     for(int i = 0; i <= 7; i++){
@@ -161,7 +163,7 @@ int MisplacedTileHeuristic(vector<int> currState){
     }
     return count;
 }
-int ManhattanHeuristic(vector<int> currState){
+int ManhattanHeuristic(const vector<int> &currState){
     //Counting distance of each tile from goal state
     vector<int> goalState = {1, 2, 3, 4, 5, 6, 7, 8, 0};
     int count = 0;
@@ -296,18 +298,25 @@ Node SearchAlgorithm(Node& initialState, int searchType){
 
     bool timeOut = false;
     int count = 0;
+    int maxQueueSize = 0;
     Node node;
+
     while(!timeOut){
         // No solution if the queue is empty
         if(nodes.empty()){
             cout << "No solution found. " << endl;
         }
+
+        maxQueueSize = max(maxQueueSize, (int)nodes.size());
         node = nodes.front();
         nodes.pop();
 
         if(GoalTest(node)){
-            cout << "Goal State!" << endl;
+            Puzzle_Output(node.pos);
+            cout << "Goal State!" << endl;            
             cout <<"Nodes Expanded: "<< count << endl;
+            cout << "Maximum Queue Size: " << maxQueueSize << endl;
+
             return node;
         }
 
@@ -319,7 +328,7 @@ Node SearchAlgorithm(Node& initialState, int searchType){
         cout << "It has g(n) = " << nodes.front().g << " and h(n) = " << nodes.front().h << endl << endl;
 
         count++;
-        if(count > 999)
+        if(count > 9999)
             timeOut = true;
     }
     return nodes.front();
@@ -337,7 +346,16 @@ int main() {
     cin >> searchType;
     cout << endl << endl;
 
+    //Time measurement referenced from https://www.geeksforgeeks.org/measure-execution-time-function-cpp/
+    auto start = chrono::high_resolution_clock::now();
+    
+    //Calling search function
     Node finalNode = SearchAlgorithm(initialState, searchType);
+    
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> elapsed = end - start;
+    
+    std::cout << "Runtime: " << elapsed.count() << " s" << endl;
     cout << "Depth: " << finalNode.g << endl;
     return 0;
 }

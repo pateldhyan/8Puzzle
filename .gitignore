@@ -1,2 +1,7 @@
 main.exe
 8Puzzle.code-workspace
+~$8_Puzzle_Data.xlsx
+8_Puzzle_Data.xlsx
+8puzzle_test.cpp
+.gitignore
+8puzzle.py

@@ -290,13 +290,13 @@ Node SearchAlgorithm(Node& initialState, int searchType){
         count++;
         //cout << "Nodes Expanded: " << count << endl;
         
-        //cout << "The move with the smallest f(n) is: " << endl;
-        //Puzzle_Output(nodes.top().pos);
-        //cout << "It has g(n) = " << nodes.top().g << " and h(n) = " << nodes.top().h << endl << endl;
+        // cout << "The move with the smallest f(n) is: " << endl;
+        // Puzzle_Output(nodes.top().pos);
+        // cout << "It has g(n) = " << nodes.top().g << " and h(n) = " << nodes.top().h << endl << endl;
         
 
         
-        if(count > 10000000){
+        if(count > 100000000){
             timeOut = true;
             cout << "Timed out . . ." << endl;            
             cout <<"Nodes Expanded: "<< count << endl;
@@ -307,7 +307,6 @@ Node SearchAlgorithm(Node& initialState, int searchType){
 }
 
 int main() {
-
     Node initialState = SelectPuzzle();
 
     cout << "Would you like to use: " << endl;
